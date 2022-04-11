@@ -23,7 +23,7 @@ namespace BenchmarkingWeb
             }
         }
         
-        [GlobalSetup(Target = nameof(GetSampleTournamentPayloadAsync))]
+        [GlobalSetup(Targets = new[] {nameof(GetSampleTournamentPayloadAsync), nameof(GetSampleTournamentPayloadNoTrackingAsync)})]
         public async Task GetSampleTournamentPayloadAsyncSetup()
         {
             if(_ids == null || !_ids.Any()){
@@ -35,11 +35,20 @@ namespace BenchmarkingWeb
         [Benchmark]
         public async Task GetSampleTournamentPayloadAsync()
         {
-            var id = _ids[randomGenerator.GetRandomInt(0, _maxCount)];
-                
             for (int i = 0; i < IterationCount; i++)
             {
+                var id = _ids[randomGenerator.GetRandomInt(0, _maxCount)];
                 await _restClient.GetSampleTournamentPayloadAsync(id);
+            }
+        }
+
+        [Benchmark]
+        public async Task GetSampleTournamentPayloadNoTrackingAsync()
+        {
+            for (int i = 0; i < IterationCount; i++)
+            {
+                var id = _ids[randomGenerator.GetRandomInt(0, _maxCount)];
+                await _restClient.GetSampleTournamentPayloadNoTrackingAsync(id);
             }
         }
     }

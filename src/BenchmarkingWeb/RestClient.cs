@@ -38,6 +38,22 @@ namespace BenchmarkingWeb
             }
         }
 
+        public async Task<Tournament> GetSampleTournamentPayloadNoTrackingAsync(string id)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                var url = $"https://localhost:{port}/api/Tournament/noTracking/{id}";
+                var results = await client.GetFromJsonAsync<Tournament>(url);
+                return results;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<List<Tournament>> GetSampleTournamentPayloadAsync()
         {
             try

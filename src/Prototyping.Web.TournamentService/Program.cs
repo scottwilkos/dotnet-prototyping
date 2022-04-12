@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Prototyping.Business.Cqrs;
 using Prototyping.Domain;
 using Prototyping.Domain.Helpers;
@@ -7,17 +8,23 @@ using Prototyping.Domain.Repositories;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+// Setup Mongo
+var client = new MongoClient("mongodb://localhost:27017");
+var database = client.GetDatabase("TournamentsDatabase");
+database.DropCollection("Tournaments");
 
 // Configure SQLite
 string dbFile = "TestDatabase.db";
 SetupHelper.SetupDb(dbFile, Assembly.GetExecutingAssembly().GetName().Name);
-builder.Services.AddDbContext<TournamentContext>(o => o.UseSqlite($"Filename={dbFile}", options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); }));
+
+// Configure MediatR and CQRS services for SQLite
+//builder.Services.AddDbContext<TournamentContext>(o => o.UseSqlite($"Filename={dbFile}", options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); }));
+builder.Services.AddDbContextPool<TournamentContext>(o => o.UseSqlite($"Filename={dbFile}", options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); }));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddMediatR(typeof(AddTournamentHandler));
-
 builder.Services.AddScoped<ITournamentRepository, TournamentEFRepository>();
 
 builder.Services.AddEndpointsApiExplorer();

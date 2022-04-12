@@ -8,7 +8,6 @@ namespace Prototyping.Business.Cqrs
         private static MongoClient client = new MongoClient(new MongoClientSettings{
             Server = new MongoServerAddress("localhost", 27017),
             MaxConnectionPoolSize = 500
-            , WaitQueueSize = 2000
         });
         private static IMongoDatabase _database = null;
         private static IMongoCollection<TournamentMongoDto> _tournaments;

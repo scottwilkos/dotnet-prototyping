@@ -8,6 +8,7 @@ using Prototyping.Domain.Repositories;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Setup Mongo
 var client = new MongoClient("mongodb://localhost:27017");
 var database = client.GetDatabase("TournamentsDatabase");

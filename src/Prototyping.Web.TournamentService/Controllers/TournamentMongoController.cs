@@ -22,29 +22,12 @@ namespace Prototyping.Web.TournamentService.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Add(AddTournamentMongoCommand command)
-        {
-            return Ok(await _mediator.Send(command));
-        }
+            =>  Ok(await _mediator.Send(command));
 
         [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            return Ok(await _mediator.Send(new GetTournamentsMongoQuery()));
-        }
+        public async Task<IActionResult> Get() => Ok(await _mediator.Send(new GetTournamentsMongoQuery()));
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            return Ok(await _mediator.Send(new GetTournamentMongoQuery{Id = id}));
-        }
-    }
-
-    public class AddTournamentCommandDto
-    {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-
-        public string Name { get; set; }
-
-        public string Description { get; set; }
+        public async Task<IActionResult> Get(string id) => Ok(await _mediator.Send(new GetTournamentMongoQuery{Id = id}));
     }
 }

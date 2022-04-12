@@ -19,11 +19,11 @@ namespace BenchmarkingWeb
         {
             for (int i = 0; i < IterationCount; i++)
             {
-                await _restClient.PostSampleTournamentPayloadAsync();
+                var result = await _restClient.PostSampleTournamentPayloadAsync();
             }
         }
         
-        [GlobalSetup(Target = nameof(GetSampleTournamentPayloadAsync))]
+        [GlobalSetup(Targets = new[] {nameof(GetSampleTournamentPayloadAsync), nameof(GetSampleTournamentPayloadNoTrackingAsync), nameof(LoadTest500ParallelRequests)})]
         public async Task GetSampleTournamentPayloadAsyncSetup()
         {
             if(_ids == null || !_ids.Any()){
@@ -35,11 +35,51 @@ namespace BenchmarkingWeb
         [Benchmark]
         public async Task GetSampleTournamentPayloadAsync()
         {
-            var id = _ids[randomGenerator.GetRandomInt(0, _maxCount)];
-                
             for (int i = 0; i < IterationCount; i++)
             {
+                var id = _ids[randomGenerator.GetRandomInt(0, _maxCount)];
                 await _restClient.GetSampleTournamentPayloadAsync(id);
+            }
+        }
+
+        [Benchmark]
+        public async Task GetSampleTournamentPayloadNoTrackingAsync()
+        {
+            for (int i = 0; i < IterationCount; i++)
+            {
+                var id = _ids[randomGenerator.GetRandomInt(0, _maxCount)];
+                var tournament = await _restClient.GetSampleTournamentPayloadNoTrackingAsync(id);
+                Console.WriteLine($"{tournament.Id} - {tournament.Name}");
+            }
+        }
+
+        [Benchmark]
+        public async Task LoadTest500ParallelRequests()
+        {
+            //
+            RestClient _restClient = new RestClient();
+            RandomGenerator randomGenerator = new RandomGenerator();
+
+            var maxCount = _ids.Length;
+
+            int MAX_ITERATIONS = 5;
+            int MAX_PARALLEL_REQUESTS = 500;
+
+            // This simulates a load test scenario where 500 parallel requests are made to the API
+            for (var step = 1; step < MAX_ITERATIONS; step++)
+            {
+                var tasks = new List<System.Threading.Tasks.Task<TournamentDto>>();
+                for (int i = 0; i < MAX_PARALLEL_REQUESTS; i++)
+                {
+                    // Get an id and make a request
+                    var id = _ids[randomGenerator.GetRandomInt(0, maxCount)];
+                    tasks.Add(_restClient.GetSampleTournamentPayloadAsync(id));
+                }
+                
+                // Run all 300 tasks in parallel
+                var result = await System.Threading.Tasks.Task.WhenAll(tasks);
+            
+                Console.WriteLine($"Completed Iteration: {step} - Count: {result.Length}");
             }
         }
     }

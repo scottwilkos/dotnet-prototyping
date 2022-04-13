@@ -10,16 +10,10 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Setup Mongo
-var client = new MongoClient("mongodb://localhost:27017");
-var database = client.GetDatabase("TournamentsDatabase");
-database.DropCollection("Tournaments");
+ConfigureMongoDb(builder);
 
 // Configure SQLite
-string dbFile = "TestDatabase.db";
-SetupHelper.SetupDb(dbFile, Assembly.GetExecutingAssembly().GetName().Name);
-
-// Configure MediatR and CQRS services for SQLite
-builder.Services.AddDbContextPool<TournamentContext>(o => o.UseSqlite($"Filename={dbFile}", options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); }));
+ConfigureSqlite(builder);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -46,3 +40,21 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static void ConfigureMongoDb(WebApplicationBuilder builder)
+{
+    var configuration = builder.Configuration.GetSection("MongoDb");
+    var client = new MongoClient(configuration["ConnectionString"]);
+    var database = client.GetDatabase(configuration["DatabaseName"]);
+    database.DropCollection(configuration["TournamentsCollection"]);
+}
+
+static void ConfigureSqlite(WebApplicationBuilder builder)
+{
+    var configuration = builder.Configuration.GetSection("Sqlite");
+    string dbFile = configuration["Filename"];
+    SetupHelper.SetupDb(dbFile, Assembly.GetExecutingAssembly().GetName().Name);
+
+    // Configure MediatR and CQRS services for SQLite
+    builder.Services.AddDbContextPool<TournamentContext>(o => o.UseSqlite(configuration["ConnectionString"], options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); }));
+}

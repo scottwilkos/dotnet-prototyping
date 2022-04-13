@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Prototyping.Web.TournamentGrpcService";
+
+package tournament;
+
+// The response message containing the greetings.
+message Tournament {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+}
+
+// The greeting service definition.
+service TournamentService { 
+  rpc AddTournament (AddTournamentRequest) returns (Tournament);
+  rpc GetTournaments (GetTournamentsRequest) returns (GetTournamentsResponse);
+  rpc GetTournament (GetTournamentRequest) returns (GetTournamentResponse);
+}
+
+// The request message containing the user's name.
+message AddTournamentRequest {
+  string name = 1;
+  string description = 2;
+}
+
+message AddTournamentResponse{
+	Tournament tournament = 1;
+}
+
+message GetTournamentsRequest{
+}
+
+message GetTournamentsResponse{
+	repeated Tournament tournaments = 1;
+}
+
+message GetTournamentRequest{
+	string id = 1;
+}
+
+message GetTournamentResponse{
+	Tournament tournament = 1;
+}

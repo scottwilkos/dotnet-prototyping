@@ -13,11 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototyping.Domain", "Proto
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Web", "4 - Web", "{4EF3DA60-8886-4C54-AA91-EBBAF5F2251B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototyping.Web.ProductService", "Prototyping.Web.TournamentService\Prototyping.Web.TournamentService.csproj", "{7E394AB1-7135-4A6C-B02E-5AEF06F4B77E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototyping.Web.TournamentService", "Prototyping.Web.TournamentService\Prototyping.Web.TournamentService.csproj", "{7E394AB1-7135-4A6C-B02E-5AEF06F4B77E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Benchmarking", "5 - Benchmarking", "{01A848E7-A506-4A1B-B98C-9F0E5BF1F314}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenchmarkingWeb", "BenchmarkingWeb\BenchmarkingWeb.csproj", "{4EBDA2BA-EAE6-4F4E-A8FA-9C4E127D2164}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototyping.Web.TournamentGrpcService", "Prototyping.Web.TournamentGrpcService\Prototyping.Web.TournamentGrpcService.csproj", "{D5423FBC-A8CA-458E-88FE-2B87C286BC58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkingGprc", "BenchmarkingGprc\BenchmarkingGprc.csproj", "{22830074-C3BC-48B5-A3CC-F0A2F8E0D9B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,14 @@ Global
 		{4EBDA2BA-EAE6-4F4E-A8FA-9C4E127D2164}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EBDA2BA-EAE6-4F4E-A8FA-9C4E127D2164}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EBDA2BA-EAE6-4F4E-A8FA-9C4E127D2164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5423FBC-A8CA-458E-88FE-2B87C286BC58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5423FBC-A8CA-458E-88FE-2B87C286BC58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5423FBC-A8CA-458E-88FE-2B87C286BC58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5423FBC-A8CA-458E-88FE-2B87C286BC58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22830074-C3BC-48B5-A3CC-F0A2F8E0D9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22830074-C3BC-48B5-A3CC-F0A2F8E0D9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22830074-C3BC-48B5-A3CC-F0A2F8E0D9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22830074-C3BC-48B5-A3CC-F0A2F8E0D9B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +62,8 @@ Global
 		{4105D05F-839F-4C14-8590-AB3C2357D8BC} = {1BCB5119-C882-47B2-BD56-C93BBD1CD3FF}
 		{7E394AB1-7135-4A6C-B02E-5AEF06F4B77E} = {4EF3DA60-8886-4C54-AA91-EBBAF5F2251B}
 		{4EBDA2BA-EAE6-4F4E-A8FA-9C4E127D2164} = {01A848E7-A506-4A1B-B98C-9F0E5BF1F314}
+		{D5423FBC-A8CA-458E-88FE-2B87C286BC58} = {4EF3DA60-8886-4C54-AA91-EBBAF5F2251B}
+		{22830074-C3BC-48B5-A3CC-F0A2F8E0D9B4} = {01A848E7-A506-4A1B-B98C-9F0E5BF1F314}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {504C458F-FA36-4203-8FB3-ECB85B7C406A}

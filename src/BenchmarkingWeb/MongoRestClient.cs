@@ -1,10 +1,9 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace BenchmarkingWeb
 {
-
-    internal class RestClient
+    internal class MongoRestClient
     {
         private static readonly HttpClient client = new HttpClient(new HttpClientHandler{UseProxy=false});
 
@@ -12,7 +11,7 @@ namespace BenchmarkingWeb
         
         private const string port = "7050";
 
-        public RestClient()
+        public MongoRestClient()
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -22,7 +21,7 @@ namespace BenchmarkingWeb
         {
             var payload = string.Concat("{\"name\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(25, 50)) ,"\", \"description\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(100, 200)) ,"\"}");
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            var url = $"https://localhost:{port}/api/Tournament" ;
+            var url = $"https://localhost:{port}/api/TournamentMongo" ;
             var response = await client.PostAsync(url, content);
             var result = await response.Content.ReadFromJsonAsync<TournamentDto>();
             return result;
@@ -32,8 +31,14 @@ namespace BenchmarkingWeb
         {
             try
             {
-                var url = $"https://localhost:{port}/api/Tournament/{id}";
+                var url = $"https://localhost:{port}/api/TournamentMongo/{id}";
                 var results = await client.GetFromJsonAsync<TournamentDto>(url);
+
+                if(results.Id != id)
+                {
+                    throw new Exception($"{id} not found");
+                }
+                
                 return results;
             }
             catch (Exception ex)
@@ -43,32 +48,19 @@ namespace BenchmarkingWeb
             }
         } 
 
-        public async Task<TournamentDto> GetSampleTournamentPayloadNoTrackingAsync(string id)
-        {
-            try
-            {
-                var url = $"https://localhost:{port}/api/Tournament/noTracking/{id}";
-                var results = await client.GetFromJsonAsync<TournamentDto>(url);
-                return results;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
         public async Task<List<TournamentDto>> GetSampleTournamentPayloadAsync()
         {
             try
             {
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                var url = $"https://localhost:{port}/api/Tournament";
+                var url = $"https://localhost:{port}/api/TournamentMongo";
                 var results = await client.GetFromJsonAsync<List<TournamentDto>>(url);
                 return results;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"{ex.Message}");
                 throw;
             }
         }

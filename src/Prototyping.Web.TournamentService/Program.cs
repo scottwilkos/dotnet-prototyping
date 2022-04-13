@@ -19,7 +19,6 @@ string dbFile = "TestDatabase.db";
 SetupHelper.SetupDb(dbFile, Assembly.GetExecutingAssembly().GetName().Name);
 
 // Configure MediatR and CQRS services for SQLite
-//builder.Services.AddDbContext<TournamentContext>(o => o.UseSqlite($"Filename={dbFile}", options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); }));
 builder.Services.AddDbContextPool<TournamentContext>(o => o.UseSqlite($"Filename={dbFile}", options => { options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName); }));
 
 builder.Services.AddControllers();

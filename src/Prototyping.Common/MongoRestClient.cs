@@ -1,18 +1,19 @@
+using Prototyping.Common.Dtos;
 using System.Net.Http.Json;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace BenchmarkingWeb
+namespace Prototyping.Common
 {
-    internal class MongoRestClient
+    public class MongoRestClient
     {
-        private static HttpClient client = new HttpClient(new SocketsHttpHandler{
+        private static HttpClient client = new HttpClient(new SocketsHttpHandler
+        {
             PooledConnectionIdleTimeout = TimeSpan.FromSeconds(60),
             PooledConnectionLifetime = TimeSpan.FromSeconds(60)
         });
 
         private static readonly RandomGenerator randomGenerator = new RandomGenerator();
-        
+
         private const string port = "7050";
 
         public MongoRestClient()
@@ -23,9 +24,9 @@ namespace BenchmarkingWeb
 
         public async Task<TournamentDto> PostSampleTournamentPayloadAsync()
         {
-            var payload = string.Concat("{\"name\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(25, 50)) ,"\", \"description\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(100, 200)) ,"\"}");
+            var payload = string.Concat("{\"name\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(25, 50)), "\", \"description\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(100, 200)), "\"}");
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            var url = $"https://localhost:{port}/api/TournamentMongo" ;
+            var url = $"https://localhost:{port}/api/TournamentMongo";
             var response = await client.PostAsync(url, content);
             var result = await response.Content.ReadFromJsonAsync<TournamentDto>();
             return result;
@@ -38,11 +39,11 @@ namespace BenchmarkingWeb
                 var url = $"https://localhost:{port}/api/TournamentMongo/{id}";
                 var results = await client.GetFromJsonAsync<TournamentDto>(url);
 
-                if(results.Id != id)
+                if (results.Id != id)
                 {
                     throw new Exception($"{id} not found");
                 }
-                
+
                 return results;
             }
             catch (Exception ex)
@@ -50,7 +51,7 @@ namespace BenchmarkingWeb
                 Console.WriteLine($"{id} not found - {ex.Message}");
                 return null;
             }
-        } 
+        }
 
         public async Task<List<TournamentDto>> GetSampleTournamentPayloadAsync()
         {

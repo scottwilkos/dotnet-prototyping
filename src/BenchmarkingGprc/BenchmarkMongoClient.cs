@@ -1,4 +1,5 @@
 using Grpc.Net.Client;
+using Prototyping.Common;
 using Prototyping.Web.Mongo.TournamentGrpcService;
 
 namespace BenchmarkingGprc

@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Attributes;
+using Prototyping.Common.Dtos;
 
 namespace BenchmarkingWeb.BenchmarkHarnesses
 {
@@ -14,11 +15,9 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         private static int _maxCount;
 
         #region DatabaseBenchmarks
-        [GlobalSetup(Targets = new[] {nameof(Sqlite_PostInSerial), nameof(Sqlite_GetInSerial), nameof(Sqlite_GetInSerial_AsNoTracking), nameof(Sqlite_GetInParallel) })]
+        [GlobalSetup(Targets = new[] {nameof(Sqlite_GetInSerial), nameof(Sqlite_GetInSerial_AsNoTracking), nameof(Sqlite_GetInParallel) })]
         public async Task Sqlite_GlobalSetup()
         {
-            await DataLoader.LoadRecordsIfNoneExist();
-
             if (_ids == null || !_ids.Any())
             {
                 _ids = (await _restClient.GetSampleTournamentPayloadAsync()).Select(_ => _.Id).ToArray();
@@ -26,14 +25,14 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark, BenchmarkCategory("WebClient", "Sqlite")]
-        public async Task Sqlite_PostInSerial()
-        {
-            for (int i = 0; i < IterationCount; i++)
-            {
-                await _restClient.PostSampleTournamentPayloadAsync();
-            }
-        }
+        // [Benchmark, BenchmarkCategory("WebClient", "Sqlite")]
+        // public async Task Sqlite_PostInSerial()
+        // {
+        //     for (int i = 0; i < IterationCount; i++)
+        //     {
+        //         await _restClient.PostSampleTournamentPayloadAsync();
+        //     }
+        // }
 
         [Benchmark, BenchmarkCategory("WebClient", "Sqlite")]
         public async Task Sqlite_GetInSerial()

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Prototyping.Business.Cqrs\Prototyping.Business.Cqrs.csproj" />
+    <ProjectReference Include="..\Prototyping.Common\Prototyping.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Prototyping.Common\Prototyping.Common.csproj" />
     <ProjectReference Include="..\Prototyping.Domain\Prototyping.Domain.csproj" />
   </ItemGroup>
 

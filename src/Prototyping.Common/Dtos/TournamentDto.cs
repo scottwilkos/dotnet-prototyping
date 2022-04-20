@@ -1,8 +1,7 @@
-using Prototyping.Domain.Models;
-
-namespace BenchmarkingWeb
+namespace Prototyping.Common.Dtos
 {
-    internal class TournamentDto: ITournament{
+    public class TournamentDto : ITournament
+    {
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

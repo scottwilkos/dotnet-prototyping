@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Attributes;
+using Prototyping.Common;
 
 namespace BenchmarkingGprc.BenchmarkHarnesses
 {

@@ -31,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Prototyping.Common\Prototyping.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Protobuf Include="..\Prototyping.Web.TournamentGrpcService\Protos\tournament.proto">
       <Link>Protos\tournament.proto</Link>
     </Protobuf>

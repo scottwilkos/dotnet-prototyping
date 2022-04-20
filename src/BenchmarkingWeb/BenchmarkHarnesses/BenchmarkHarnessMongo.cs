@@ -1,4 +1,6 @@
 using BenchmarkDotNet.Attributes;
+using Prototyping.Common;
+using Prototyping.Common.Dtos;
 
 namespace BenchmarkingWeb.BenchmarkHarnesses
 {
@@ -16,11 +18,9 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
 
         #region MongoDatabaseBenchmarks
 
-        [GlobalSetup(Targets = new[] {nameof(Mongo_PostInParallel), nameof(Mongo_GetInSerial), nameof(Mongo_GetInParallel) })]
+        [GlobalSetup(Targets = new[] {nameof(Mongo_GetInSerial), nameof(Mongo_GetInParallel) })]
         public async Task Mongo_GlobalSetup()
         {
-            await DataLoader.LoadRecordsIfNoneExist();
-
             try
             {
                 if (_mongoIds == null || !_mongoIds.Any())
@@ -37,16 +37,16 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
-        public async Task Mongo_PostInParallel()
-        {
-            List<Task> tasks = new List<Task>();
-            for (int i = 0; i < IterationCount; i++)
-            {
-                tasks.Add(_mongoRestClient.PostSampleTournamentPayloadAsync());
-            }
-            await Task.WhenAll(tasks);
-        }
+        // [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
+        // public async Task Mongo_PostInParallel()
+        // {
+        //     List<Task> tasks = new List<Task>();
+        //     for (int i = 0; i < IterationCount; i++)
+        //     {
+        //         tasks.Add(_mongoRestClient.PostSampleTournamentPayloadAsync());
+        //     }
+        //     await Task.WhenAll(tasks);
+        // }
 
         [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
         public async Task Mongo_GetInSerial()

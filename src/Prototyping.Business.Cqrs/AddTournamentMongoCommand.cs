@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
-using Prototyping.Domain.Models;
+using Prototyping.Common.Dtos;
 
 namespace Prototyping.Business.Cqrs
 {

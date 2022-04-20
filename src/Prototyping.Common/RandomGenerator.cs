@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace BenchmarkingGprc
+namespace Prototyping.Common
 {
-    internal class RandomGenerator
+    public class RandomGenerator
     {
         private static Random ran = new Random();
 

@@ -1,7 +1,6 @@
-using System.Security.Authentication;
 using MediatR;
 using MongoDB.Driver;
-using Prototyping.Domain.Models;
+using Prototyping.Common.Dtos;
 
 namespace Prototyping.Business.Cqrs
 {

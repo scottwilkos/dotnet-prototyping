@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Prototyping.Common.Dtos;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace BenchmarkingWeb

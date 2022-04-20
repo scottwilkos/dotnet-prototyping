@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Prototyping.Domain.Models;
+using Prototyping.Common.Dtos;
 
 namespace Prototyping.Business.Cqrs
 {

@@ -1,11 +1,15 @@
 using System.Net.Http.Json;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BenchmarkingWeb
 {
     internal class MongoRestClient
     {
-        private static readonly HttpClient client = new HttpClient(new HttpClientHandler{UseProxy=false});
+        private static HttpClient client = new HttpClient(new SocketsHttpHandler{
+            PooledConnectionIdleTimeout = TimeSpan.FromSeconds(60),
+            PooledConnectionLifetime = TimeSpan.FromSeconds(60)
+        });
 
         private static readonly RandomGenerator randomGenerator = new RandomGenerator();
         

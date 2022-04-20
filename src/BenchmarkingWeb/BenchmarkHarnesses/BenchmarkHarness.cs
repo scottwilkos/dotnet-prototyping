@@ -1,12 +1,11 @@
 using BenchmarkDotNet.Attributes;
-using Prototyping.Domain.Models;
 
 namespace BenchmarkingWeb.BenchmarkHarnesses
 {
     [HtmlExporter]
     public class BenchmarkHarness
     {
-        [Params(100, 200, 300)]
+        [Params(100, 200, 300, 400, 500)]
         public int IterationCount;
         private readonly RestClient _restClient = new RestClient();
 
@@ -15,9 +14,11 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         private static int _maxCount;
 
         #region DatabaseBenchmarks
-        [GlobalSetup(Targets = new[] { nameof(GetSampleTournamentPayloadAsync), nameof(GetSampleTournamentPayloadNoTrackingAsync), nameof(LoadTest500ParallelRequests) })]
+        [GlobalSetup(Targets = new[] {nameof(PostSampleTournamentPayloadAsync), nameof(GetSampleTournamentPayloadAsync), nameof(GetSampleTournamentPayloadNoTrackingAsync), nameof(LoadTestParallelRequests) })]
         public async Task GetSampleTournamentPayloadAsyncSetup()
         {
+            await DataLoader.LoadRecordsIfNoneExist();
+
             if (_ids == null || !_ids.Any())
             {
                 _ids = (await _restClient.GetSampleTournamentPayloadAsync()).Select(_ => _.Id).ToArray();
@@ -30,7 +31,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         {
             for (int i = 0; i < IterationCount; i++)
             {
-                var result = await _restClient.PostSampleTournamentPayloadAsync();
+                await _restClient.PostSampleTournamentPayloadAsync();
             }
         }
 
@@ -55,30 +56,23 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark]
-        public async Task LoadTest500ParallelRequests()
+        public async Task LoadTestParallelRequests()
         {
             //
             RandomGenerator randomGenerator = new RandomGenerator();
 
             var maxCount = _ids.Length;
-
-            int MAX_ITERATIONS = 5;
-            int MAX_PARALLEL_REQUESTS = 500;
-
             // This simulates a load test scenario where 500 parallel requests are made to the API
-            for (var step = 1; step < MAX_ITERATIONS; step++)
-            {
                 var tasks = new List<Task<TournamentDto>>();
-                for (int i = 0; i < MAX_PARALLEL_REQUESTS; i++)
+                for (int i = 0; i < IterationCount; i++)
                 {
                     // Get an id and make a request
                     var id = _ids[randomGenerator.GetRandomInt(0, maxCount)];
                     tasks.Add(_restClient.GetSampleTournamentPayloadAsync(id));
                 }
 
-                // Run all 300 tasks in parallel
+                // Run all  tasks in parallel
                 var result = await Task.WhenAll(tasks);
-            }
         }
         #endregion
     }

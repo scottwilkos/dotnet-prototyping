@@ -5,7 +5,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
     [HtmlExporter]
     public class BenchmarkHarnessMongo
     {
-        [Params(100, 200, 300)]
+        [Params(100, 200, 300, 400, 500)]
         public int IterationCount;
         private readonly RestClient _restClient = new RestClient();
         private readonly MongoRestClient _mongoRestClient = new MongoRestClient();
@@ -18,15 +18,19 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         [Benchmark]
         public async Task PostSampleTournamentMongoPayloadAsync()
         {
+            List<Task> tasks = new List<Task>();
             for (int i = 0; i < IterationCount; i++)
             {
-                var result = await _mongoRestClient.PostSampleTournamentPayloadAsync();
+                tasks.Add(_mongoRestClient.PostSampleTournamentPayloadAsync());
             }
+            await Task.WhenAll(tasks);
         }
 
-        [GlobalSetup(Targets = new[] { nameof(GetSampleMongoTournamentPayloadAsync), nameof(LoadTest500ParallelMongoRequests) })]
+        [GlobalSetup(Targets = new[] {nameof(PostSampleTournamentMongoPayloadAsync), nameof(GetSampleMongoTournamentPayloadAsync), nameof(LoadTestParallelMongoRequests) })]
         public async Task GetSampleMongoTournamentPayloadAsyncSetup()
         {
+            await DataLoader.LoadRecordsIfNoneExist();
+
             try
             {
                 if (_mongoIds == null || !_mongoIds.Any())
@@ -39,6 +43,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                throw;
             }
         }
 
@@ -52,32 +57,25 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-
         [Benchmark]
-        public async Task LoadTest500ParallelMongoRequests()
+        public async Task LoadTestParallelMongoRequests()
         {
             //
             RandomGenerator randomGenerator = new RandomGenerator();
 
             var maxCount = _mongoIds.Length;
 
-            int MAX_ITERATIONS = 5;
-            int MAX_PARALLEL_REQUESTS = 500;
-
             // This simulates a load test scenario where 500 parallel requests are made to the API
-            for (var step = 1; step <= MAX_ITERATIONS; step++)
+            var tasks = new List<Task<TournamentDto>>();
+            for (int i = 0; i < IterationCount; i++)
             {
-                var tasks = new List<Task<TournamentDto>>();
-                for (int i = 0; i < MAX_PARALLEL_REQUESTS; i++)
-                {
-                    // Get an id and make a request
-                    var id = _mongoIds[randomGenerator.GetRandomInt(0, maxCount)];
-                    tasks.Add(_mongoRestClient.GetSampleTournamentPayloadAsync(id));
-                }
-
-                // Run all 500 tasks in parallel
-                var result = await Task.WhenAll(tasks);
+                // Get an id and make a request
+                var id = _mongoIds[randomGenerator.GetRandomInt(0, maxCount)];
+                tasks.Add(_mongoRestClient.GetSampleTournamentPayloadAsync(id));
             }
+
+            // Run all 500 tasks in parallel
+            var result = await Task.WhenAll(tasks);
         }
 
         #endregion
@@ -85,11 +83,11 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         [GlobalCleanup]
         public async Task PostRun()
         {
-            var records = (await _restClient.GetSampleTournamentPayloadAsync()).Select(_ => _.Id).ToArray();
-            var mongoRecords = (await _mongoRestClient.GetSampleTournamentPayloadAsync()).Select(_ => _.Id).ToArray();
+            var records = (await _restClient.GetSampleTournamentPayloadAsync()).Count();
+            var mongoRecords = (await _mongoRestClient.GetSampleTournamentPayloadAsync()).Count();
 
-            Console.WriteLine($"Records from SQL: {records.Length}");
-            Console.WriteLine($"Records from Mongo: {mongoRecords.Length}");
+            Console.WriteLine($"Records from SQL: {records}");
+            Console.WriteLine($"Records from Mongo: {mongoRecords}");
         }
     }
 }

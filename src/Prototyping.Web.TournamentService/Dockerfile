@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Prototyping.Web.TournamentService/Prototyping.Web.TournamentService.csproj", "Prototyping.Web.TournamentService/"]
+COPY ["Prototyping.Business.Cqrs/Prototyping.Business.Cqrs.csproj", "Prototyping.Business.Cqrs/"]
+COPY ["Prototyping.Domain/Prototyping.Domain.csproj", "Prototyping.Domain/"]
 RUN dotnet restore "Prototyping.Web.TournamentService/Prototyping.Web.TournamentService.csproj"
 COPY . .
 WORKDIR "/src/Prototyping.Web.TournamentService"

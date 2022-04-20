@@ -32,13 +32,24 @@ namespace BenchmarkingGprc
             return reply.Tournaments.ToList();
         }
 
-        public async Task<Tournament> GetTournamentAsync(string id)
+        public async Task<ResultsVerifier> GetTournamentAsync(string id)
         {
             var request = new GetTournamentRequest() { Id = id };
 
             var reply = await _client.GetTournamentAsync(request);
 
-            return reply.Tournament;
+            return new ResultsVerifier
+            {
+                Id = id,
+                Tournament = reply.Tournament
+            };
         }
+    }
+
+    public class ResultsVerifier
+    {
+        public string Id { get; set; }
+
+        public Prototyping.Web.TournamentGrpcService.Tournament Tournament { get; set; }
     }
 }

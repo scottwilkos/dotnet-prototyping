@@ -14,8 +14,8 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         private static int _maxCount;
 
         #region DatabaseBenchmarks
-        [GlobalSetup(Targets = new[] {nameof(PostSampleTournamentPayloadAsync), nameof(GetSampleTournamentPayloadAsync), nameof(GetSampleTournamentPayloadNoTrackingAsync), nameof(LoadTestParallelRequests) })]
-        public async Task GetSampleTournamentPayloadAsyncSetup()
+        [GlobalSetup(Targets = new[] {nameof(Sqlite_PostInSerial), nameof(Sqlite_GetInSerial), nameof(Sqlite_GetInSerial_AsNoTracking), nameof(Sqlite_GetInParallel) })]
+        public async Task Sqlite_GlobalSetup()
         {
             await DataLoader.LoadRecordsIfNoneExist();
 
@@ -27,7 +27,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark]
-        public async Task PostSampleTournamentPayloadAsync()
+        public async Task Sqlite_PostInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
             {
@@ -36,7 +36,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark]
-        public async Task GetSampleTournamentPayloadAsync()
+        public async Task Sqlite_GetInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
             {
@@ -46,7 +46,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark]
-        public async Task GetSampleTournamentPayloadNoTrackingAsync()
+        public async Task Sqlite_GetInSerial_AsNoTracking()
         {
             for (int i = 0; i < IterationCount; i++)
             {
@@ -56,7 +56,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark]
-        public async Task LoadTestParallelRequests()
+        public async Task Sqlite_GetInParallel()
         {
             //
             RandomGenerator randomGenerator = new RandomGenerator();

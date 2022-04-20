@@ -15,19 +15,9 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         private static int _maxMongoCount;
 
         #region MongoDatabaseBenchmarks
-        [Benchmark]
-        public async Task PostSampleTournamentMongoPayloadAsync()
-        {
-            List<Task> tasks = new List<Task>();
-            for (int i = 0; i < IterationCount; i++)
-            {
-                tasks.Add(_mongoRestClient.PostSampleTournamentPayloadAsync());
-            }
-            await Task.WhenAll(tasks);
-        }
 
-        [GlobalSetup(Targets = new[] {nameof(PostSampleTournamentMongoPayloadAsync), nameof(GetSampleMongoTournamentPayloadAsync), nameof(LoadTestParallelMongoRequests) })]
-        public async Task GetSampleMongoTournamentPayloadAsyncSetup()
+        [GlobalSetup(Targets = new[] {nameof(Mongo_PostInParallel), nameof(Mongo_GetInSerial), nameof(Mongo_GetInParallel) })]
+        public async Task Mongo_GlobalSetup()
         {
             await DataLoader.LoadRecordsIfNoneExist();
 
@@ -48,7 +38,18 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark]
-        public async Task GetSampleMongoTournamentPayloadAsync()
+        public async Task Mongo_PostInParallel()
+        {
+            List<Task> tasks = new List<Task>();
+            for (int i = 0; i < IterationCount; i++)
+            {
+                tasks.Add(_mongoRestClient.PostSampleTournamentPayloadAsync());
+            }
+            await Task.WhenAll(tasks);
+        }
+
+        [Benchmark]
+        public async Task Mongo_GetInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
             {
@@ -58,7 +59,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark]
-        public async Task LoadTestParallelMongoRequests()
+        public async Task Mongo_GetInParallel()
         {
             //
             RandomGenerator randomGenerator = new RandomGenerator();

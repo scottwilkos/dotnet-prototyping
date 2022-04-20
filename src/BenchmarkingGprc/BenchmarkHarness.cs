@@ -19,8 +19,8 @@ namespace BenchmarkingGprc
 
         private static BenchmarkClient _client = new BenchmarkClient();
 
-        [GlobalSetup(Targets = new[] { nameof(GetSampleTournamentPayloadAsync), nameof(LoadTestParallelRequests)})]
-        public async Task GetSampleTournamentPayloadAsyncSetup()
+        [GlobalSetup(Targets = new[] { nameof(Grpc_Sqlite_GetInSerial), nameof(Grpc_Sqlite_GetInParallel)})]
+        public async Task Grpc_Sqlite_GlobalSetup()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace BenchmarkingGprc
         }
 
         [Benchmark]
-        public async Task PostSampleTournamentPayloadAsync()
+        public async Task Grpc_Sqlite_PostInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
             {
@@ -48,7 +48,7 @@ namespace BenchmarkingGprc
         }
 
         [Benchmark]
-        public async Task GetSampleTournamentPayloadAsync()
+        public async Task Grpc_Sqlite_GetInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
             {
@@ -58,7 +58,7 @@ namespace BenchmarkingGprc
         }
 
         [Benchmark]
-        public async Task LoadTestParallelRequests()
+        public async Task Grpc_Sqlite_GetInParallel()
         {
             //
             RandomGenerator randomGenerator = new RandomGenerator();

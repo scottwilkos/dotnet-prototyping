@@ -1,20 +1,20 @@
 using Grpc.Net.Client;
-using Prototyping.Web.TournamentGrpcService;
+using Prototyping.Web.Mongo.TournamentGrpcService;
 
 namespace BenchmarkingGprc
 {
-    public class BenchmarkClient
+    public class BenchmarkMongoClient
     {
         private static readonly GrpcChannel channel = GrpcChannel.ForAddress("https://localhost:7028",
             new GrpcChannelOptions { MaxReceiveMessageSize = null });
-        private static TournamentService.TournamentServiceClient? _client;
+        private static TournamentMongoService.TournamentMongoServiceClient? _client;
 
         private static RandomGenerator randomGenerator = new RandomGenerator();
 
-        public BenchmarkClient()
+        public BenchmarkMongoClient()
         {
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            _client = new TournamentService.TournamentServiceClient(channel);
+            _client = new TournamentMongoService.TournamentMongoServiceClient(channel);
         }
 
         public async Task AddTournamentAsync()
@@ -32,13 +32,13 @@ namespace BenchmarkingGprc
             return reply.Tournaments.ToList();
         }
 
-        public async Task<ResultsVerifier> GetTournamentAsync(string id)
+        public async Task<MongoResultsVerifier> GetTournamentAsync(string id)
         {
             var request = new GetTournamentRequest() { Id = id };
 
             var reply = await _client.GetTournamentAsync(request);
 
-            return new ResultsVerifier
+            return new MongoResultsVerifier
             {
                 Id = id,
                 Tournament = reply.Tournament
@@ -46,7 +46,7 @@ namespace BenchmarkingGprc
         }
     }
 
-    public class ResultsVerifier
+    public class MongoResultsVerifier
     {
         public string Id { get; set; }
 

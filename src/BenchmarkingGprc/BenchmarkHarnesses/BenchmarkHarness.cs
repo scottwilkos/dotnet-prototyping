@@ -1,10 +1,6 @@
 using BenchmarkDotNet.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BenchmarkingGprc
+namespace BenchmarkingGprc.BenchmarkHarnesses
 {
     [HtmlExporter]
     public class BenchmarkHarness
@@ -19,7 +15,7 @@ namespace BenchmarkingGprc
 
         private static BenchmarkClient _client = new BenchmarkClient();
 
-        [GlobalSetup(Targets = new[] { nameof(Grpc_Sqlite_GetInSerial), nameof(Grpc_Sqlite_GetInParallel)})]
+        [GlobalSetup(Targets = new[] { nameof(Grpc_Sqlite_GetInSerial), nameof(Grpc_Sqlite_GetInParallel) })]
         public async Task Grpc_Sqlite_GlobalSetup()
         {
             try
@@ -38,7 +34,7 @@ namespace BenchmarkingGprc
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("Grpc", "Sqlite")]
         public async Task Grpc_Sqlite_PostInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
@@ -47,7 +43,7 @@ namespace BenchmarkingGprc
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("Grpc", "Sqlite")]
         public async Task Grpc_Sqlite_GetInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
@@ -57,7 +53,8 @@ namespace BenchmarkingGprc
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("Grpc", "Sqlite")]
+
         public async Task Grpc_Sqlite_GetInParallel()
         {
             //
@@ -78,7 +75,8 @@ namespace BenchmarkingGprc
             var result = await Task.WhenAll(tasks);
             foreach (var item in result)
             {
-                if(item.Id != item.Tournament.Id){
+                if (item.Id != item.Tournament.Id)
+                {
                     throw new Exception("Ids do not match");
                 }
             }

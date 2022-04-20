@@ -17,7 +17,7 @@ namespace Prototyping.Domain.Models
         [Key]
         [Required]
         public string Id { get; protected set; } = Guid.NewGuid().ToString();
-
+        
         public string Name { get; protected set; }
 
         public string Description { get; protected set; }

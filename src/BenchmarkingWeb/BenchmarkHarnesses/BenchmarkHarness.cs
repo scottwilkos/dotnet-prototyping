@@ -26,7 +26,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("WebClient", "Sqlite")]
         public async Task Sqlite_PostInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
@@ -35,7 +35,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("WebClient", "Sqlite")]
         public async Task Sqlite_GetInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
@@ -45,7 +45,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("WebClient", "Sqlite")]
         public async Task Sqlite_GetInSerial_AsNoTracking()
         {
             for (int i = 0; i < IterationCount; i++)
@@ -55,7 +55,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("WebClient", "Sqlite")]
         public async Task Sqlite_GetInParallel()
         {
             //

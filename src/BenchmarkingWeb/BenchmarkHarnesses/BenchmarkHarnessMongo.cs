@@ -37,7 +37,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
         public async Task Mongo_PostInParallel()
         {
             List<Task> tasks = new List<Task>();
@@ -48,7 +48,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             await Task.WhenAll(tasks);
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
         public async Task Mongo_GetInSerial()
         {
             for (int i = 0; i < IterationCount; i++)
@@ -58,7 +58,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
             }
         }
 
-        [Benchmark]
+        [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
         public async Task Mongo_GetInParallel()
         {
             //

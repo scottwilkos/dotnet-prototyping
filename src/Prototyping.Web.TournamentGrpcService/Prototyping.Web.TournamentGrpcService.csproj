@@ -9,9 +9,11 @@
 
   <ItemGroup>
     <None Remove="Protos\tournament.proto" />
+    <None Remove="Protos\tournamentMongo.proto" />
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\tournamentMongo.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\tournament.proto" GrpcServices="Server" />
   </ItemGroup>
 

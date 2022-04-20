@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option csharp_namespace = "Prototyping.Web.TournamentGrpcService";
+option csharp_namespace = "Prototyping.Web.Mongo.TournamentGrpcService";
 
-package tournament;
+package tournamentMongo;
 
 // The response message containing the greetings.
 message Tournament {
@@ -12,7 +12,7 @@ message Tournament {
 }
 
 // The greeting service definition.
-service TournamentService { 
+service TournamentMongoService { 
   rpc AddTournament (AddTournamentRequest) returns (Tournament);
   rpc GetTournaments (GetTournamentsRequest) returns (GetTournamentsResponse);
   rpc GetTournament (GetTournamentRequest) returns (GetTournamentResponse);

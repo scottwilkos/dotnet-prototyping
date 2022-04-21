@@ -22,7 +22,7 @@ namespace Prototyping.Common
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<TournamentDto> PostSampleTournamentPayloadAsync()
+        public async Task<TournamentDto?> PostSampleTournamentPayloadAsync()
         {
             var payload = string.Concat("{\"name\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(25, 50)), "\", \"description\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(100, 200)), "\"}");
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
@@ -32,7 +32,7 @@ namespace Prototyping.Common
             return result;
         }
 
-        public async Task<TournamentDto> GetSampleTournamentPayloadAsync(string id)
+        public async Task<TournamentDto?> GetSampleTournamentPayloadAsync(string id)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Prototyping.Common
             }
         }
 
-        public async Task<List<TournamentDto>> GetSampleTournamentPayloadAsync()
+        public async Task<List<TournamentDto>?> GetSampleTournamentPayloadAsync()
         {
             try
             {

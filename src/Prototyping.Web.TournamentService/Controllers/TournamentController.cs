@@ -36,5 +36,8 @@ namespace Prototyping.Web.TournamentService.Controllers
 
         [HttpGet("noTracking/{id}")]
         public async Task<IActionResult> GetNoTracking(string id) => Ok(await this._mediator.Send(new GetTournamentAsReadonlyQuery { Id = id }));
+
+        [HttpGet("recordCount")]
+        public async Task<IActionResult> GetRecordCount() => Ok(await this._mediator.Send(new GetTournamentRecordCountQuery()));
     }
 }

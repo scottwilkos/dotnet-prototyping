@@ -9,10 +9,8 @@ namespace BenchmarkingGprc.BenchmarkHarnesses
         [Params(100, 200, 300, 400, 500)]
         public int IterationCount;
         private static readonly RandomGenerator randomGenerator = new RandomGenerator();
-        private static string[] _ids = null;
-        private static string[] _mongoIds = null;
+        private static string[] _ids = new string[0];
         private static int _maxCount;
-        private static int _maxMongoCount;
 
         private static BenchmarkClient _client = new BenchmarkClient();
 
@@ -35,14 +33,14 @@ namespace BenchmarkingGprc.BenchmarkHarnesses
             }
         }
 
-        [Benchmark, BenchmarkCategory("Grpc", "Sqlite")]
-        public async Task Grpc_Sqlite_PostInSerial()
-        {
-            for (int i = 0; i < IterationCount; i++)
-            {
-                await _client.AddTournamentAsync();
-            }
-        }
+        // [Benchmark, BenchmarkCategory("Grpc", "Sqlite")]
+        // public async Task Grpc_Sqlite_PostInSerial()
+        // {
+        //     for (int i = 0; i < IterationCount; i++)
+        //     {
+        //         await _client.AddTournamentAsync();
+        //     }
+        // }
 
         [Benchmark, BenchmarkCategory("Grpc", "Sqlite")]
         public async Task Grpc_Sqlite_GetInSerial()

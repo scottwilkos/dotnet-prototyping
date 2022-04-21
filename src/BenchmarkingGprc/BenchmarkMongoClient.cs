@@ -49,8 +49,8 @@ namespace BenchmarkingGprc
 
     public class MongoResultsVerifier
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
-        public Tournament Tournament { get; set; }
+        public Tournament? Tournament { get; set; }
     }
 }

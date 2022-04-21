@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Prototyping.Business.Cqrs\Prototyping.Business.Cqrs.csproj" />
     <ProjectReference Include="..\Prototyping.Domain\Prototyping.Domain.csproj" />
+    <ProjectReference Include="..\Prototyping.Web.Common\Prototyping.Web.Common.csproj" />
   </ItemGroup>
 
 </Project>

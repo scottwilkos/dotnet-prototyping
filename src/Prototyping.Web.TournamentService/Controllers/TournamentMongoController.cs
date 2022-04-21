@@ -23,5 +23,8 @@ namespace Prototyping.Web.TournamentService.Controllers
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id) => Ok(await _mediator.Send(new GetTournamentMongoQuery{Id = id}));
+
+        [HttpGet("recordCount")]
+        public async Task<IActionResult> GetRecordCount() => Ok(await this._mediator.Send(new GetTournamentRecordCountMongoQuery()));
     }
 }

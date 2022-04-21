@@ -8,4 +8,6 @@ namespace Prototyping.Business.Cqrs
         [Required]
         public string Id { get; set; }
     }
+
+    public class GetTournamentRecordCountQuery : IRequest<long>{}
 }

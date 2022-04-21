@@ -9,6 +9,9 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
     {
         [Params(100, 200, 300, 400, 500)]
         public int IterationCount;
+
+        [Params(10, 20, 30, 40, 50)]
+        public int PostIterationCount;
         private readonly RestClient _restClient = new RestClient();
         private readonly MongoRestClient _mongoRestClient = new MongoRestClient();
 

@@ -15,13 +15,13 @@ namespace BenchmarkingGprc
         public BenchmarkClient()
         {
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            _client = new TournamentService.TournamentServiceClient(channel);
+            _client = new TournamentService.TournamentServiceClient(channel) ?? throw new NullReferenceException("Unable to get TournamentServiceClient");
         }
 
         public async Task AddTournamentAsync()
         {
             var request = new AddTournamentRequest { Name = randomGenerator.GetRandomString(randomGenerator.GetRandomInt(25, 50)), Description = randomGenerator.GetRandomString(randomGenerator.GetRandomInt(100, 200)) };
-            var reply = await _client.AddTournamentAsync(request);
+            var reply = await _client?.AddTournamentAsync(request);
         }
 
         public async Task<List<Tournament>> GetTournamentsAsync()
@@ -49,8 +49,8 @@ namespace BenchmarkingGprc
 
     public class ResultsVerifier
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
-        public Tournament Tournament { get; set; }
+        public Tournament? Tournament { get; set; }
     }
 }

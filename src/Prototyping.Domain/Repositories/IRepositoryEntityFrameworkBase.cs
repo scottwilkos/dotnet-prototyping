@@ -12,5 +12,6 @@ namespace Prototyping.Domain.Repositories
         Task<int> Save(CancellationToken cancellationToken);
         Task<TEntity> SingleOrDefault(CancellationToken cancellationToken);
         Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
+        Task<long> Count(CancellationToken cancellationToken);
     }
 }

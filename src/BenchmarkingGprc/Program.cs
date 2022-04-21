@@ -7,25 +7,6 @@ await DataLoader.LoadRecordsIfNoneExist();
 BenchmarkRunner.Run(typeof(BenchmarkMongoHarness).Assembly);
 await DisplayRecordCounts();
 
-
-// var client = new BenchmarkClient();
-
-// await client.AddTournamentAsync();
-
-// var reply = await client.GetTournamentsAsync();
-
-// if (reply?.Count != null)
-// {
-//     Console.WriteLine($"Tounrament Records: {reply.Count}");
-// }
-// else
-// {
-//     Console.WriteLine("Error");
-// }
-
-// Console.WriteLine("Exiting...");
-
-
 async static Task DisplayRecordCounts()
 {
     var _restClient = new BenchmarkClient();

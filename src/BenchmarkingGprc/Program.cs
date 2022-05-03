@@ -9,7 +9,7 @@ await DisplayRecordCounts();
 
 async static Task DisplayRecordCounts()
 {
-    var _restClient = new BenchmarkClient();
+    var _restClient = new BenchmarkClient("https://localhost:7028");
     var _mongoRestClient = new BenchmarkMongoClient();
 
     var records = (await _restClient.GetTournamentsAsync()).Count();
@@ -25,7 +25,7 @@ public static class DataLoader
     {
         const int recordsToCreate = 10000;
 
-        var _restClient = new BenchmarkClient();
+        var _restClient = new BenchmarkClient("https://localhost:7028");
         var _mongoRestClient = new BenchmarkMongoClient();
 
         var records = (await _restClient.GetTournamentsAsync()).Count();

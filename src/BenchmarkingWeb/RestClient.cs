@@ -10,20 +10,21 @@ namespace BenchmarkingWeb
         private static readonly HttpClient client = new HttpClient(new HttpClientHandler{UseProxy=false});
 
         private static readonly RandomGenerator randomGenerator = new RandomGenerator();
-        
-        private const string port = "7050";
+        private readonly string _baseUrl;
 
-        public RestClient()
+        public RestClient(string baseUrl)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            this._baseUrl = baseUrl;
         }
 
         public async Task<TournamentDto> PostSampleTournamentPayloadAsync()
         {
             var payload = string.Concat("{\"name\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(25, 50)) ,"\", \"description\": \"", randomGenerator.GetRandomString(randomGenerator.GetRandomInt(100, 200)) ,"\"}");
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            var url = $"https://localhost:{port}/api/Tournament" ;
+            var url = $"{_baseUrl}/api/Tournament" ;
             var response = await client.PostAsync(url, content);
             var result = await response.Content.ReadFromJsonAsync<TournamentDto>();
             return result;
@@ -33,7 +34,7 @@ namespace BenchmarkingWeb
         {
             try
             {
-                var url = $"https://localhost:{port}/api/Tournament/{id}";
+                var url = $"{_baseUrl}/api/Tournament/{id}";
                 var results = await client.GetFromJsonAsync<TournamentDto>(url);
                 return results;
             }
@@ -48,7 +49,7 @@ namespace BenchmarkingWeb
         {
             try
             {
-                var url = $"https://localhost:{port}/api/Tournament/noTracking/{id}";
+                var url = $"{_baseUrl}/api/Tournament/noTracking/{id}";
                 var results = await client.GetFromJsonAsync<TournamentDto>(url);
                 return results;
             }
@@ -64,7 +65,7 @@ namespace BenchmarkingWeb
             {
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                var url = $"https://localhost:{port}/api/Tournament";
+                var url = $"{_baseUrl}/api/Tournament";
                 var results = await client.GetFromJsonAsync<List<TournamentDto>>(url);
                 return results;
             }

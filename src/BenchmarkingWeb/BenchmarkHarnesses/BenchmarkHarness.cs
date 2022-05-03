@@ -8,7 +8,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
     {
         [Params(100, 200, 300, 400, 500)]
         public int IterationCount;
-        private readonly RestClient _restClient = new RestClient();
+        private readonly RestClient _restClient = new RestClient("https://localhost:7050");
 
         private static readonly RandomGenerator randomGenerator = new RandomGenerator();
         private static string[] _ids = null;

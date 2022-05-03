@@ -12,7 +12,7 @@ namespace BenchmarkingGprc.BenchmarkHarnesses
         private static string[] _ids = new string[0];
         private static int _maxCount;
 
-        private static BenchmarkClient _client = new BenchmarkClient();
+        private static BenchmarkClient _client = new BenchmarkClient("https://localhost:7028");
 
         [GlobalSetup(Targets = new[] { nameof(Grpc_Sqlite_GetInSerial), nameof(Grpc_Sqlite_GetInParallel) })]
         public async Task Grpc_Sqlite_GlobalSetup()

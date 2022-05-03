@@ -6,15 +6,14 @@ namespace BenchmarkingGprc
 {
     public class BenchmarkClient
     {
-        private static readonly GrpcChannel channel = GrpcChannel.ForAddress("https://localhost:7028",
-            new GrpcChannelOptions { MaxReceiveMessageSize = null });
         private static TournamentService.TournamentServiceClient? _client;
 
         private static RandomGenerator randomGenerator = new RandomGenerator();
 
-        public BenchmarkClient()
+        public BenchmarkClient(string baseUrl)
         {
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            var channel = GrpcChannel.ForAddress(baseUrl, new GrpcChannelOptions { MaxReceiveMessageSize = null });
             _client = new TournamentService.TournamentServiceClient(channel) ?? throw new NullReferenceException("Unable to get TournamentServiceClient");
         }
 

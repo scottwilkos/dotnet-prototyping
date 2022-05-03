@@ -8,14 +8,16 @@ class Program
     static async Task Main(string[] args)
     {
         Console.WriteLine("Starting Benchmarking");
-        BenchmarkRunner.Run(typeof(BenchmarkHarnessMongo).Assembly);
+        // BenchmarkRunner.Run(typeof(BenchmarkHarnessMongo).Assembly);
+        BenchmarkRunner.Run<BenchmarkHarnessMongo>();
+
         await DisplayRecordCounts();
     }
 
     private async static Task DisplayRecordCounts()
     {
-        var _restClient = new RestClient();
-        var _mongoRestClient = new MongoRestClient();
+        var _restClient = new RestClient("https://localhost:7050");
+        var _mongoRestClient = new MongoRestClient("https://localhost:7050");
 
         var records = (await _restClient.GetSampleTournamentPayloadAsync()).Count();
         var mongoRecords = (await _mongoRestClient.GetSampleTournamentPayloadAsync()).Count();

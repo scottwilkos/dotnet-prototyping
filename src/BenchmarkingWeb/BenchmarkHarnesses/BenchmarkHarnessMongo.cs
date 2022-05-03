@@ -12,8 +12,8 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
 
         [Params(10, 20, 30, 40, 50)]
         public int PostIterationCount;
-        private readonly RestClient _restClient = new RestClient();
-        private readonly MongoRestClient _mongoRestClient = new MongoRestClient();
+        private readonly RestClient _restClient = new RestClient("https://localhost:7050");
+        private readonly MongoRestClient _mongoRestClient = new MongoRestClient("https://localhost:7050");
 
         private static readonly RandomGenerator randomGenerator = new RandomGenerator();
         private static string[] _mongoIds = null;
@@ -21,7 +21,7 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
 
         #region MongoDatabaseBenchmarks
 
-        [GlobalSetup(Targets = new[] {nameof(Mongo_GetInSerial), nameof(Mongo_GetInParallel) })]
+        [GlobalSetup(Targets = new[] {nameof(Mongo_GetInSerial), nameof(Mongo_GetInParallel), nameof(Mongo_GetInParallel_NoCqrs), nameof(Mongo_GetInSerial_NoCqrs) })]
         public async Task Mongo_GlobalSetup()
         {
             try
@@ -62,6 +62,16 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
         }
 
         [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
+        public async Task Mongo_GetInSerial_NoCqrs()
+        {
+            for (int i = 0; i < IterationCount; i++)
+            {
+                var id = _mongoIds[randomGenerator.GetRandomInt(0, _maxMongoCount)];
+                var tournament = await _mongoRestClient.GetSampleTournamentNoCqrs(id);
+            }
+        }
+
+        [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
         public async Task Mongo_GetInParallel()
         {
             //
@@ -76,6 +86,27 @@ namespace BenchmarkingWeb.BenchmarkHarnesses
                 // Get an id and make a request
                 var id = _mongoIds[randomGenerator.GetRandomInt(0, maxCount)];
                 tasks.Add(_mongoRestClient.GetSampleTournamentPayloadAsync(id));
+            }
+
+            // Run all 500 tasks in parallel
+            var result = await Task.WhenAll(tasks);
+        }
+
+        [Benchmark, BenchmarkCategory("WebClient", "Mongo")]
+        public async Task Mongo_GetInParallel_NoCqrs()
+        {
+            //
+            RandomGenerator randomGenerator = new RandomGenerator();
+
+            var maxCount = _mongoIds.Length;
+
+            // This simulates a load test scenario where 500 parallel requests are made to the API
+            var tasks = new List<Task<TournamentDto>>();
+            for (int i = 0; i < IterationCount; i++)
+            {
+                // Get an id and make a request
+                var id = _mongoIds[randomGenerator.GetRandomInt(0, maxCount)];
+                tasks.Add(_mongoRestClient.GetSampleTournamentNoCqrs(id));
             }
 
             // Run all 500 tasks in parallel

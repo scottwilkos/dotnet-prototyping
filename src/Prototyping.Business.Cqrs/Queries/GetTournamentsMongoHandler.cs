@@ -1,30 +1,29 @@
 using System.Security.Authentication;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace Prototyping.Business.Cqrs
 {
     public class GetTournamentsMongoHandler : IRequestHandler<GetTournamentsMongoQuery, IList<TournamentMongoDto>>
     {
-        private static MongoClient client = new MongoClient("mongodb://localhost:27017");
-        private static IMongoDatabase _database = null;
+        private static MongoClient client;
+        private static IMongoDatabase _database;
         private static IMongoCollection<TournamentMongoDto> _tournaments;
 
-        public GetTournamentsMongoHandler()
+        public GetTournamentsMongoHandler(IConfiguration configuration)
         {
-            if (_database == null)
-            {
-                string connectionString = "mongodb://localhost:27017";
-                MongoClientSettings settings = MongoClientSettings.FromUrl(
-                  new MongoUrl(connectionString)
-                );
-                settings.SslSettings =
-                  new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
-                var client = new MongoClient(settings);
+            var mongoConnectionString = configuration.GetSection("MongoDb:ConnectionString").Value;
 
-                _database = client.GetDatabase("TournamentsDatabase");
-                _tournaments = _database.GetCollection<TournamentMongoDto>("Tournaments");
-            }
+            MongoClientSettings settings = MongoClientSettings.FromUrl(
+              new MongoUrl(mongoConnectionString)
+            );
+            settings.SslSettings =
+              new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+
+            client = client ?? new MongoClient(settings);
+            _database = _database ?? client.GetDatabase("TournamentsDatabase");
+            _tournaments = _tournaments ?? _database.GetCollection<TournamentMongoDto>("Tournaments");
         }
 
         public async Task<IList<TournamentMongoDto>> Handle(GetTournamentsMongoQuery request, CancellationToken cancellationToken)

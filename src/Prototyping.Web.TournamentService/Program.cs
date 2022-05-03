@@ -1,6 +1,7 @@
 using MediatR;
 using Protottyping.Business.SetupService;
 using Prototyping.Business.Cqrs;
+using Prototyping.Common.Configurations;
 using Prototyping.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ var databaseSetupService = new DatabaseSetupService();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
+/* Setup Configurations */
 databaseSetupService.ConfigureSql(builder);
 
 builder.Services.AddMediatR(typeof(AddTournamentHandler));
